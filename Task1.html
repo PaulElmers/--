@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сортування продуктів</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .select-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .select-container label {
+            margin-right: 10px;
+        }
+
+        .product-list {
+            list-style: none;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 500px;
+            margin: 0 auto;
+        }
+
+        .product-item {
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-name {
+            font-weight: bold;
+        }
+
+        .product-price {
+            color: #333;
+        }
+
+        .product-id {
+            color: #999;
+        }
+
+        #sort-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #sort-button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список продуктів</h1>
+
+    <div class="select-container">
+        <label for="sort-by">Сортувати за:</label>
+        <select id="sort-by">
+            <option value="name">За назвою</option>
+            <option value="price">За ціною</option>
+            <option value="id">За ID</option>
+        </select>
+    </div>
+
+    <button id="sort-button">Сортувати</button>
+
+    <ul class="product-list">
+    </ul>
+
+    <script>
+        const products = [
+            { id: 1, name: "Товар 1", price: 100 },
+            { id: 2, name: "Товар 2", price: 50 },
+            { id: 3, name: "Товар 3", price: 150 },
+        ];
+
+        const productList = document.querySelector(".product-list");
+        const sortBySelect = document.getElementById("sort-by");
+        const sortButton = document.getElementById("sort-button");
+
+        function renderProducts(products) {
+            productList.innerHTML = "";
+            products.forEach(product => {
+                const productItem = document.createElement("li");
+                productItem.classList.add("product-item");
+
+                const productName = document.createElement("span");
+                productName.classList.add("product-name");
+                productName.textContent = product.name;
+
+                const productPrice = document.createElement("span");
+                productPrice.textContent = `Ціна: ${product.price}`;
+
+                const productId = document.createElement("span");
+                productId.textContent = `ID: ${product.id}`;
+
+                productItem.appendChild(productName);
+                productItem.appendChild(productPrice);
+                productItem.appendChild(productId);
+
+                productList.appendChild(productItem);
+            });
+        }
+
+        function mysort(arr, cmp) {
+            arr.sort(cmp);
+        }
+
+        sortButton.addEventListener("click", () => {
+            const sortBy = sortBySelect.value;
+            let comparator;
+
+            switch (sortBy) {
+                case "name":
+                    comparator = (a, b) => a.name.localeCompare(b.name);
+                    break;
+                case "price":
+                    comparator = (a, b) => a.price - b.price;
+                    break;
+                case "id":
+                    comparator = (a, b) => a.id - b.id;
+                    break;
+                default:
+                    return;
+            }
+
+            mysort(products, comparator);
+            renderProducts(products);
+        });
+
+        renderProducts(products);
+    </script>
+</body>
+</html>
